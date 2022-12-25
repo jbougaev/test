@@ -24,6 +24,10 @@ export class Player {
         this.speed = 0;
         this.maxSpeed = 10;
 
+        this.index = 0
+        this.numberOfFrames = 0;
+        this.animationSpeedModifier = 5;
+
     }
 
     update(lastKey){
@@ -55,6 +59,11 @@ export class Player {
         }else if(this.x < 0){
             this.x = 0;
         }
+
+        //update x frames
+        this.numberOfFrames = this.currentState.numberOfFrames;
+        this.frameX = Math.floor(this.index / this.animationSpeedModifier) % this.numberOfFrames;
+        this.index = this.index + 1;
     }
 
 

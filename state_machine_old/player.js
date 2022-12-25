@@ -46,7 +46,7 @@ export class Player {
 
     draw() {
 
-        this.updateXFrame();
+       
         this.ctx.drawImage(this.image, this.width * this.frameX, this.height * this.frameY, this.width, this.height, this.x, this.y, this.width, this.height);
 
     }
@@ -83,6 +83,8 @@ export class Player {
         } else {
             this.vy = 0;
         }
+
+        this.updateXFrame();
 
 
     }
