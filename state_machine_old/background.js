@@ -1,4 +1,4 @@
-export class Background{
+export class BackgroundLayer{
     constructor(game, image,speed){
         this.gameHeight = game.gameHeight;
         this.gameWidth = game.gameWidth;
