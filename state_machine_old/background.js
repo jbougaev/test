@@ -1,5 +1,5 @@
 export class Background{
-    constructor(game, image,speedModifier, gameSpeed){
+    constructor(game, image,speed){
         this.gameHeight = game.gameHeight;
         this.gameWidth = game.gameWidth;
         
@@ -7,9 +7,7 @@ export class Background{
        
         this.image = image;
        
-        this.speed = gameSpeed;
-        this.speedModifier = speedModifier ;
-        this.speed = this.speed  * this.speedModifier ;
+        this.speed = speed ;
 
         this.x = 0;
         this.y = 0 ;

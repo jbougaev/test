@@ -14,11 +14,13 @@ export class Game {
 
         this.player = new Player(this);
 
-        this.background1 = new Background(this, document.getElementById('layer1'), 0.2, 10);
-        this.background2 = new Background(this, document.getElementById('layer2'), 0.4, 10);
-        this.background3 = new Background(this, document.getElementById('layer3'), 0.6, 10);
-        this.background4 = new Background(this, document.getElementById('layer4'), 0.8, 10);
-        this.background5 = new Background(this, document.getElementById('layer5'), 1, 10);
+        this.gameSpeed = 10;
+
+        this.background1 = new Background(this, document.getElementById('layer1'), 0.2 * this.gameSpeed);
+        this.background2 = new Background(this, document.getElementById('layer2'), 0.4 * this.gameSpeed);
+        this.background3 = new Background(this, document.getElementById('layer3'), 0.6 * this.gameSpeed);
+        this.background4 = new Background(this, document.getElementById('layer4'), 0.8 * this.gameSpeed);
+        this.background5 = new Background(this, document.getElementById('layer5'), this.gameSpeed);
 
         this.inputHandler = new InputHandler();
     }
