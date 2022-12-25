@@ -97,6 +97,8 @@ export class Player {
         this.frameY = this.currentState.frameY;
         this.maxFrame = this.currentState.maxOfXFrames;
         this.speed = this.currentState.setSpeed(this);
+        this.game.gameSpeed = this.speed;
+        console.log(this.game.gameSpeed);
     }
 
     onGround() {

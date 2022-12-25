@@ -1,4 +1,5 @@
 import { Keys } from './inputHandler.js';
+import { Player } from './player.js';
 
 export const states = {
     STANDING_LEFT: 0,
@@ -30,7 +31,7 @@ export class StandingLeft {
 
     }
 
-    getSpeed(payer) {
+    getSpeed(player) {
         return 0;
     }
 }
@@ -50,7 +51,7 @@ export class StandingRight {
         }
     }
 
-    getSpeed(payer) {
+    getSpeed(player) {
         return 0;
     }
 }
@@ -67,12 +68,12 @@ export class SittingLeft {
             return states.RUNNING_RIGHT;
         } else if (lastKey === Keys.KD_LEFT) {
             return states.RUNNING_LEFT;
-        }else if (lastKey === Keys.KD_UP) {
+        } else if (lastKey === Keys.KD_UP) {
             return states.RUNNING_LEFT;
         }
     }
 
-    getSpeed(payer) {
+    getSpeed(player) {
         return 0;
     }
 }
@@ -89,12 +90,12 @@ export class SittingRight {
             return states.RUNNING_LEFT;
         } else if (lastKey === Keys.KD_RIGHT) {
             return states.RUNNING_RIGHT;
-        }else if (lastKey === Keys.KD_UP) {
+        } else if (lastKey === Keys.KD_UP) {
             return states.RUNNING_RIGHT;
         }
     }
 
-    getSpeed(payer) {
+    getSpeed(player) {
         return 0;
     }
 }
@@ -115,8 +116,8 @@ export class RunningLeft {
         }
     }
 
-    getSpeed(payer) {
-        return -payer.maxSpeed;
+    getSpeed(player) {
+        return -player.maxSpeed;
     }
 }
 
@@ -134,11 +135,13 @@ export class RunningRight {
             return states.SITTING_RIGHT;
         } else if (lastKey === Keys.KD_LEFT) {
             return states.RUNNING_LEFT;
+        } else if (lastKey === Keys.KD_UP) {
+            return states.JUMPING_RIGHT;
         }
     }
 
-    getSpeed(payer) {
-        return payer.maxSpeed;
+    getSpeed(player) {
+        return player.maxSpeed;
     }
 }
 
@@ -152,6 +155,10 @@ export class JumpingLeft {
     getState(lastKey) {
 
     }
+
+    getSpeed(player) {
+        return player.maxSpeed;
+    }
 }
 
 export class JumpingRight {
@@ -161,8 +168,17 @@ export class JumpingRight {
         this.numberOfFrames = 7;
     }
 
-    getState(lastKey) {
+    getState(lastKey, player) {
+        if (player.speedY > 0) {
+            return states.FALLING_RIGHT;
+        }
+    }
 
+    getSpeed(player) {
+        if (player.isOnGround()) {
+            player.speedY = player.speedY - 30;
+        }
+        return player.maxSpeed * 0.5;
     }
 }
 
@@ -177,6 +193,10 @@ export class FallingLeft {
     getState(lastKey) {
 
     }
+
+    getSpeed(player) {
+        return player.maxSpeed;
+    }
 }
 
 
@@ -187,7 +207,13 @@ export class FallingRight {
         this.numberOfFrames = 7;
     }
 
-    getState(lastKey) {
+    getState(lastKey, player) {
+        if (player.isOnGround()) {
+            return states.RUNNING_RIGHT;
+        }
+    }
 
+    getSpeed(player) {
+        return player.maxSpeed;
     }
 }

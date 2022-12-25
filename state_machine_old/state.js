@@ -32,11 +32,11 @@ export class StandingLeft extends State {
     getState(input, player) {
         if (input === Key.KU_LEFT) {
             return states.RUNNING_LEFT;
-        } 
-        
+        }
+
         else if (input === Key.KD_DOWN) {
             return states.SITTING_LEFT;
-        }  else if (input === Key.KD_UP) {
+        } else if (input === Key.KD_UP) {
             return states.JUMPING_LEFT;
         }
     }
@@ -48,13 +48,13 @@ export class StandingRight extends State {
     }
 
     getState(input, player) {
-       if(input === Key.KU_RIGHT){
+        if (input === Key.KU_RIGHT) {
             return states.RUNNING_RIGHT;
-        } 
-        
+        }
+
         else if (input === Key.KD_DOWN) {
             return states.SITTING_RIGHT;
-        }  else if (input === Key.KD_UP) {
+        } else if (input === Key.KD_UP) {
             return states.JUMPING_RIGHT;
         }
     }
@@ -71,7 +71,7 @@ export class SittingLeft extends State {
             return states.SITTING_RIGHT;
         } else if (input === Key.KD_UP) {
             return states.RUNNING_LEFT;
-        }else if (input === Key.KD_LEFT) {
+        } else if (input === Key.KD_LEFT) {
             return states.RUNNING_LEFT;
         }
     }
@@ -88,7 +88,7 @@ export class SittingRight extends State {
             return states.SITTING_LEFT;
         } else if (input === Key.KD_UP) {
             return states.RUNNING_RIGHT;
-        }else if (input === Key.KD_RIGHT) {
+        } else if (input === Key.KD_RIGHT) {
             return states.RUNNING_RIGHT;
         }
     }
@@ -106,11 +106,11 @@ export class RunningLeft extends State {
     getState(input, player) {
         if (input === Key.KD_UP) {
             return states.JUMPING_LEFT;
-        }else if(input === Key.KD_RIGHT){
+        } else if (input === Key.KD_RIGHT) {
             return states.RUNNING_RIGHT;
-        }else if(input === Key.KD_DOWN){
+        } else if (input === Key.KD_DOWN) {
             return states.SITTING_LEFT;
-        }else if(input === Key.KD_LEFT){
+        } else if (input === Key.KD_LEFT) {
             return states.STANDING_LEFT;
         }
     }
@@ -129,11 +129,11 @@ export class RunningRight extends State {
     getState(input, player) {
         if (input === Key.KD_UP) {
             return states.JUMPING_RIGHT;
-        }else if(input === Key.KD_RIGHT){
+        } else if (input === Key.KD_RIGHT) {
             return states.STANDING_RIGHT;
-        }else if(input === Key.KD_DOWN){
+        } else if (input === Key.KD_DOWN) {
             return states.SITTING_RIGHT;
-        }else if(input === Key.KD_LEFT){
+        } else if (input === Key.KD_LEFT) {
             return states.RUNNING_LEFT;
         }
     }
@@ -149,7 +149,7 @@ export class JumpingLeft extends State {
         if (player.onGround()) {
             player.vy -= 30;
         }
-        return -player.maxSpeed * 0.5;
+        return -player.maxSpeed;
     }
 
     getState(input, player) {
@@ -171,7 +171,7 @@ export class JumpingRight extends State {
         if (player.onGround()) {
             player.vy -= 30;
         }
-        return player.maxSpeed * 0.5;
+        return player.maxSpeed;
 
     }
 
@@ -188,7 +188,6 @@ export class JumpingRight extends State {
 export class FallingLeft extends State {
     constructor() {
         super(5, 7, states.FALLING_LEFT);
-
     }
 
 
@@ -198,6 +197,10 @@ export class FallingLeft extends State {
         } else if (player.onGround()) {
             return states.RUNNING_LEFT;
         }
+    }
+
+    setSpeed(player) {
+        return -player.maxSpeed;
     }
 }
 
@@ -213,5 +216,9 @@ export class FallingRight extends State {
         } else if (player.onGround()) {
             return states.RUNNING_RIGHT;
         }
+    }
+
+    setSpeed(player) {
+        return player.maxSpeed;
     }
 }
