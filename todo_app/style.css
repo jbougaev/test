@@ -1,0 +1,55 @@
+
+
+.btn{
+    background: #e9e4e5;
+    margin-left: 10px;
+    display: block;
+    border: 1px solid #bbbaba;
+    height: 20px;
+    width: 20px;
+}
+
+.cbx{
+   margin-left: 0;
+   margin-right: 10px;
+   display: block;
+}
+
+.item-text{
+    display: block;
+    width: 200px;
+}
+
+.error{
+    color: red;
+}
+
+#container{
+    width: 280px;
+    margin: 20px auto 0 auto;
+}
+
+#add{
+    width: 30px;
+    height: 30px;
+}
+
+#text{
+    width: 227px;
+    height: 30px;
+}
+
+.item-container{
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+
+#days{
+    margin-top: 10px;
+    width: 228px;
+    height: 30px;
+}
+
+
+
