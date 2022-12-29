@@ -9,7 +9,9 @@ export const states = {
     JUMPING_LEFT: 6,
     JUMPING_RIGHT: 7,
     FALLING_LEFT: 8,
-    FALLING_RIGHT: 9
+    FALLING_RIGHT: 9,
+    ROLLING_LEFT: 10,
+    ROLLING_RIGHT: 11
 }
 
 export class State {
@@ -29,14 +31,16 @@ export class StandingLeft extends State {
         super(1, 7, states.STANDING_LEFT);
     }
 
-    getState(input, player) {
-        if (input === Key.KU_LEFT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+
+        if (keys.indexOf(Key.KD_LEFT) === -1) {
             return states.RUNNING_LEFT;
         }
 
-        else if (input === Key.KD_DOWN) {
+        else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_LEFT;
-        } else if (input === Key.KD_UP) {
+        } else if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_LEFT;
         }
     }
@@ -47,14 +51,15 @@ export class StandingRight extends State {
         super(0, 7, states.STANDING_RIGHT);
     }
 
-    getState(input, player) {
-        if (input === Key.KU_RIGHT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_RIGHT) === -1) {
             return states.RUNNING_RIGHT;
         }
 
-        else if (input === Key.KD_DOWN) {
+        else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_RIGHT;
-        } else if (input === Key.KD_UP) {
+        } else if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_RIGHT;
         }
     }
@@ -66,12 +71,13 @@ export class SittingLeft extends State {
 
     }
 
-    getState(input, player) {
-        if (input === Key.KD_RIGHT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.SITTING_RIGHT;
-        } else if (input === Key.KD_UP) {
+        } else if (keys.indexOf(Key.KD_UP) > -1) {
             return states.RUNNING_LEFT;
-        } else if (input === Key.KD_LEFT) {
+        } else if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.RUNNING_LEFT;
         }
     }
@@ -83,12 +89,13 @@ export class SittingRight extends State {
 
     }
 
-    getState(input, player) {
-        if (input === Key.KD_LEFT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.SITTING_LEFT;
-        } else if (input === Key.KD_UP) {
+        } else if (keys.indexOf(Key.KD_UP) > -1) {
             return states.RUNNING_RIGHT;
-        } else if (input === Key.KD_RIGHT) {
+        } else if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.RUNNING_RIGHT;
         }
     }
@@ -103,14 +110,15 @@ export class RunningLeft extends State {
         return - player.maxSpeed;
     }
 
-    getState(input, player) {
-        if (input === Key.KD_UP) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_LEFT;
-        } else if (input === Key.KD_RIGHT) {
+        } else if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.RUNNING_RIGHT;
-        } else if (input === Key.KD_DOWN) {
+        } else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_LEFT;
-        } else if (input === Key.KD_LEFT) {
+        } else if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.STANDING_LEFT;
         }
     }
@@ -126,15 +134,19 @@ export class RunningRight extends State {
         return player.maxSpeed;
     }
 
-    getState(input, player) {
-        if (input === Key.KD_UP) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_RIGHT;
-        } else if (input === Key.KD_RIGHT) {
+        } else if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.STANDING_RIGHT;
-        } else if (input === Key.KD_DOWN) {
+        } else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_RIGHT;
-        } else if (input === Key.KD_LEFT) {
+        } else if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.RUNNING_LEFT;
+        } else if (keys.indexOf(Key.KD_ENTER) > -1) {
+            return states.ROLLING_RIGHT;
+
         }
     }
 }
@@ -152,8 +164,9 @@ export class JumpingLeft extends State {
         return -player.maxSpeed;
     }
 
-    getState(input, player) {
-        if (input === Key.KD_RIGHT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.JUMPING_RIGHT;
         } else if (player.vy > 0) {
             return states.FALLING_LEFT
@@ -175,12 +188,15 @@ export class JumpingRight extends State {
 
     }
 
-    getState(input, player) {
-        if (input === Key.KD_LEFT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.JUMPING_LEFT;
 
         } else if (player.vy > 0) {
             return states.FALLING_RIGHT;
+        } else if(keys.indexOf(Key.KD_ENTER) > -1){
+            return states.ROLLING_RIGHT;
         }
     }
 }
@@ -191,8 +207,9 @@ export class FallingLeft extends State {
     }
 
 
-    getState(input, player) {
-        if (input === Key.KD_RIGHT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.FALLING_RIGHT;
         } else if (player.onGround()) {
             return states.RUNNING_LEFT;
@@ -210,15 +227,56 @@ export class FallingRight extends State {
     }
 
 
-    getState(input, player) {
-        if (input === Key.KD_LEFT) {
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+        if (keys.indexOf(Key.KD_LEFT) > -1) {
             return states.FALLING_LEFT;
         } else if (player.onGround()) {
             return states.RUNNING_RIGHT;
+        }else if(keys.indexOf(Key.KD_ENTER) > -1){
+            return states.ROLLING_RIGHT;
         }
     }
 
     setSpeed(player) {
         return player.maxSpeed;
+    }
+}
+
+export class RollingLeft extends State {
+    constructor() {
+        super(11, 7, states.ROLLING_LEFT);
+    }
+
+
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;
+
+    }
+
+    setSpeed(player) {
+        return player.maxSpeed * 2;
+    }
+}
+
+export class RollingRight extends State {
+    constructor() {
+        super(10, 7, states.ROLLING_RIGHT);
+    }
+
+
+    getState(inputHandler, player) {
+        let keys = inputHandler.lastKey;;
+        if (keys.indexOf(Key.KD_ENTER) === -1 && player.onGround()) {
+            return states.RUNNING_RIGHT;
+        }  else if(keys.indexOf(Key.KD_ENTER) > -1 &&  keys.indexOf(Key.KD_UP) > -1){
+            if (player.onGround()) {
+                player.vy -= 30;
+            }
+        }
+    }
+
+    setSpeed(player) {
+        return player.maxSpeed * 2;
     }
 }

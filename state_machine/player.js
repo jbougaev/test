@@ -6,7 +6,8 @@ export class Player {
     constructor(game) {
         this.gameWidth = game.canvas.width;
         this.gameHeight = game.canvas.height;
-
+this.game = game;
+this.ctx = this.game.ctx;
         this.width = 200;
         this.height = 181.83;
 
@@ -74,6 +75,10 @@ export class Player {
         //update x frames
         this.numberOfFrames = this.currentState.numberOfFrames;
         this.frameX = Math.floor(this.index / this.animationSpeedModifier) % this.numberOfFrames;
+        if (this.frameX === this.numberOfFrames) {
+
+            this.frameX = 0;
+        }
         this.index = this.index + 1;
 
         if(!this.isOnGround()){
@@ -84,7 +89,8 @@ export class Player {
     }
 
 
-    draw(ctx) {
+    draw() {
+       
         ctx.drawImage(this.image,
             this.width * this.frameX, this.height * this.frameY, this.width, this.height,
             this.x, this.y, this.width, this.height);

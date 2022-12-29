@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, SittingLeft, SittingRight, RunningRight, RunningLeft, JumpingLeft, JumpingRight, FallingLeft, FallingRight } from './state.js';
+import { StandingLeft, StandingRight, SittingLeft, SittingRight, RunningRight, RunningLeft, JumpingLeft, JumpingRight, FallingLeft, FallingRight, RollingLeft, RollingRight } from './state.js';
 
 export class Player {
     constructor(game) {
@@ -17,7 +17,9 @@ export class Player {
         new JumpingLeft(),
         new JumpingRight(),
         new SittingLeft(),
-        new FallingRight()];
+        new FallingRight(),
+        new RollingLeft(),
+        new RollingRight()];
         this.currentState = this.states[5];
 
         this.image = document.getElementById('dogImg');
@@ -35,7 +37,7 @@ export class Player {
         this.frameY = 0;
 
         this.speed = 0;
-        this.maxSpeed = 10;
+        this.maxSpeed = this.game.gameSpeed;
 
         this.maxFrame = this.currentState.maxOfXFrames;
         this.vy = 0;
@@ -46,22 +48,26 @@ export class Player {
 
     draw() {
 
-       
+        if (this.game.debug) {
+            this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+        }
         this.ctx.drawImage(this.image, this.width * this.frameX, this.height * this.frameY, this.width, this.height, this.x, this.y, this.width, this.height);
 
     }
 
     updateXFrame() {
         this.frameX = Math.floor(this.index / this.factor) % this.maxFrame;
-        if (this.frameX === this.maxFrame - 1) {
+        if (this.frameX === this.maxFrame) {
 
             this.frameX = 0;
         }
         this.index += 1;
     }
-    
-    update(input) {
-        const stateName = this.currentState.getState(input, this);
+
+    update(inputHandler) {
+        this.checkCollision();
+
+        const stateName = this.currentState.getState(inputHandler, this);
         this.setState(stateName !== '' && stateName !== undefined ? stateName : this.currentState.stateName);
 
         this.x += this.speed;
@@ -98,10 +104,25 @@ export class Player {
         this.maxFrame = this.currentState.maxOfXFrames;
         this.speed = this.currentState.setSpeed(this);
         this.game.gameSpeed = this.speed;
-        console.log(this.game.gameSpeed);
+       
     }
 
     onGround() {
         return this.y >= this.gameHeight - this.height - this.game.bottomMargin;
+    }
+
+    checkCollision() {
+        this.game.enemies.forEach(enemy => {
+
+
+            if (enemy.x < this.x + this.width &&
+                enemy.x + enemy.width > this.x &&
+                enemy.y + enemy.height > this.y &&
+                enemy.y < this.y + this.height) {
+                enemy.markedForDeletion = true;
+                this.game.score++;
+            }
+
+        });
     }
 }

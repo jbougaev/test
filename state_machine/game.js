@@ -17,6 +17,6 @@ export class Game {
     }
 
     draw() {
-        this.player.draw(this.ctx);
+        this.player.draw();
     }
 }
