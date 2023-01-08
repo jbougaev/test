@@ -7,7 +7,7 @@ export class BackgroundLayer{
        
         this.image = image;
 
-        this.image1 = document.getElementById('layer2');
+       
        
         this.speed = this.game.gameSpeed * speedModifier ;
         this.speedModifier = speedModifier;

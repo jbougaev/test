@@ -5,6 +5,7 @@ export class Game {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
+        this.gameSpeed = 10;
 
         this.player = new Player(this);
         this.inputHandler = new InputHandler();

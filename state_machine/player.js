@@ -6,8 +6,8 @@ export class Player {
     constructor(game) {
         this.gameWidth = game.canvas.width;
         this.gameHeight = game.canvas.height;
-this.game = game;
-this.ctx = this.game.ctx;
+        this.game = game;
+        this.ctx = this.game.ctx;
         this.width = 200;
         this.height = 181.83;
 
@@ -26,7 +26,7 @@ this.ctx = this.game.ctx;
         this.currentState = this.states[1];
 
         this.speed = 0;
-        this.maxSpeed = 10;
+        this.maxSpeed = this.game.gameSpeed;
 
         this.index = 0
         this.numberOfFrames = 0;
@@ -62,8 +62,8 @@ this.ctx = this.game.ctx;
         this.y = this.y + this.speedY;
 
         //limitation
-        if (this.x > this.gameWidth - this.width) {
-            this.x = this.gameWidth - this.width
+        if (this.x > this.gameWidth/2 - this.width) {
+            this.x = this.gameWidth/2 - this.width;
         } else if (this.x < 0) {
             this.x = 0;
         }
@@ -81,22 +81,22 @@ this.ctx = this.game.ctx;
         }
         this.index = this.index + 1;
 
-        if(!this.isOnGround()){
+        if (!this.isOnGround()) {
             this.speedY = this.speedY + 1;
-        }else{
+        } else {
             this.speedY = 0;
         }
     }
 
 
     draw() {
-       
-        ctx.drawImage(this.image,
+
+        this.ctx.drawImage(this.image,
             this.width * this.frameX, this.height * this.frameY, this.width, this.height,
             this.x, this.y, this.width, this.height);
     }
 
-    isOnGround(){
+    isOnGround() {
         return this.y === this.y0;
     }
 }
