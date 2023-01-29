@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, SittingLeft, SittingRight, RunningRight, RunningLeft, JumpingLeft, JumpingRight, FallingLeft, FallingRight, RollingLeft, RollingRight } from './state.js';
+import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit } from './state.js';
 
 export class Player {
     constructor(game) {
@@ -7,25 +7,21 @@ export class Player {
         this.ctx = game.ctx;
         this.game = game;
 
-        this.states = [new StandingRight( this.game),
-        new StandingLeft( this.game),
-        new FallingLeft( this.game),
-        new SittingRight( this.game),
-
-        new RunningLeft( this.game),
-        new RunningRight( this.game),
-        new JumpingLeft( this.game),
-        new JumpingRight( this.game),
-        new SittingLeft( this.game),
-        new FallingRight( this.game),
-        new RollingLeft( this.game),
-        new RollingRight( this.game)];
+        this.states = [
+            new StandingRight(this.game),
+            new SittingRight(this.game),
+            new RunningRight(this.game),
+            new JumpingRight(this.game),
+            new FallingRight(this.game),
+            new Diving(this.game),
+            new Hit(this.game),
+            new RollingRight(this.game)];
         this.currentState = this.states[5];
 
         this.image = document.getElementById('dogImg');
 
-        this.width = 200;
-        this.height = 181.83;
+        this.width = 100;
+        this.height = 91.3;
 
         this.x0 = this.gameWidth / 2 - this.width / 2;
         this.y0 = this.gameHeight - this.height - game.bottomMargin;
@@ -91,20 +87,15 @@ export class Player {
         }
 
         this.updateXFrame();
-
-
     }
+
     setState(stateName) {
-
         const state = this.states.find(s => s.stateName === stateName);
-
         this.currentState = state;
-
         this.frameY = this.currentState.frameY;
         this.maxFrame = this.currentState.maxOfXFrames;
-        this.speed = this.currentState.setSpeed(this);
+        this.speed = this.currentState.getXSpeed(this);
         this.game.gameSpeed = this.speed;
-       
     }
 
     onGround() {
@@ -113,8 +104,6 @@ export class Player {
 
     checkCollision() {
         this.game.enemies.forEach(enemy => {
-
-
             if (enemy.x < this.x + this.width &&
                 enemy.x + enemy.width > this.x &&
                 enemy.y + enemy.height > this.y &&
@@ -124,5 +113,9 @@ export class Player {
             }
 
         });
+    }
+
+    decreaseVY(){
+        this.vy -= 30;
     }
 }

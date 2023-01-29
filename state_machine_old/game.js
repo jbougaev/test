@@ -4,6 +4,7 @@ import { InputHandler } from './inputHandler.js';
 import { BackgroundLayer } from './background.js';
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './enemy.js';
 import {UI} from './ui.js';
+import { Dust, Fire, Splash } from './particle.js';
 
 export class Game {
     constructor(canvas, ctx) {
@@ -15,7 +16,7 @@ export class Game {
         this.climbingEnimies = true;
         this.canvas = canvas;
         this.ctx = ctx;
-        this.bottomMargin = 130;
+        this.bottomMargin = 135;
         this.gameSpeed = 3;
         this.gameWidth = this.canvas.width;
         this.gameHeight = this.canvas.height;
@@ -125,5 +126,17 @@ export class Game {
 
             }
         }
+    }
+
+    addDustParticle(){
+        this.particles.unshift(new Dust(this));
+    }
+
+    addFireParticle(){
+        this.particles.unshift(new Fire(this));
+    }
+
+    addSplashParticle(){
+        this.particles.unshift(new Splash(this));
     }
 }
