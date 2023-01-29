@@ -113,7 +113,7 @@ export class RunningLeft extends State {
     }
 
     getState(inputHandler) {
-        this.game.particles.unshift(new Dust(this.game, this.game.player.x, this.game.player.y));
+        this.game.particles.unshift(new Dust(this.game));
         let keys = inputHandler.lastKey;
         if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_LEFT;
@@ -138,7 +138,7 @@ export class RunningRight extends State {
     }
 
     getState(inputHandler) {
-        this.game.particles.unshift(new Dust(this.game, this.game.player.x + this.game.player.width * 0.6, this.game.player.y + this.game.player.height));
+        this.game.particles.unshift(new Dust(this.game));
         let keys = inputHandler.lastKey;
         if (keys.indexOf(Key.KD_UP) > -1) {
             return states.JUMPING_RIGHT;
@@ -270,7 +270,7 @@ export class RollingRight extends State {
 
 
     getState(inputHandler) {
-        this.game.particles.unshift(new Fire(this.game, this.game.player.x + this.game.player.width * 0.5, this.game.player.y + this.game.player.height* 0.5));
+        this.game.particles.unshift(new Fire(this.game));
         let keys = inputHandler.lastKey;;
         if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround()) {
             return states.RUNNING_RIGHT;

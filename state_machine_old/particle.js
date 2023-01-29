@@ -21,11 +21,11 @@ export class Particle {
 
 
 export class Dust extends Particle {
-    constructor(game, x, y) {
+    constructor(game) {
         super(game);
         this.size = Math.random() * 10 + 10;
-        this.x = x;
-        this.y = y;
+        this.x = this.game.player.x + this.game.player.width * 0.6;
+        this.y = this.game.player.y + this.game.player.height;
         this.speedX = Math.random();
         this.speedY = Math.random();
         this.color = 'rgba(0,0,0,0.2)';
@@ -42,11 +42,11 @@ export class Dust extends Particle {
 
 
 export class Fire extends Particle {
-    constructor(game, x, y) {
+    constructor(game) {
         super(game);
         this.size = Math.random() * 100 + 50;
-        this.x = x;
-        this.y = y;
+        this.x =  this.game.player.x + this.game.player.width * 0.5;
+        this.y =  this.game.player.y + this.game.player.height* 0.5;
         this.speedX = 1;
         this.speedY = 1;
         this.image = document.getElementById('fire');
