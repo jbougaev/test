@@ -49,13 +49,13 @@ export class FlyingEnemy extends Enemy {
         this.numberOfFrames = 6;
         this.image = document.getElementById('enemy_fly');
         this.angle = 0;
-        this.angleSpeed = Math.random() * 0.1 + 0.1;
+        this.angleSpeed = Math.random() * 0.1 + 0.1;  // 0.1 do 0.2
     }
 
     update(){
         super.update();
         this.angle  = this.angle + this.angleSpeed;
-        this.y = this.y + Math.cos(this.angle);
+        this.y = this.y + Math.sin(this.angle);
     }
 }
 

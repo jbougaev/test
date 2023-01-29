@@ -37,6 +37,8 @@ export class Game {
         this.enemyInterval = 1000;
         this.enemyFactor = 15;
 
+        this.particles = [];
+
         this.ui = new UI(this);
     }
 
@@ -66,6 +68,17 @@ export class Game {
             });
         }
 
+        this.particles.forEach(particle => {
+            particle.update();
+            if (particle.markedForDeletion) {
+                this.particles.splice(this.particles.indexOf(particle), 1);
+            }
+        });
+
+        if(this.particles.length > 50){
+            this.particles.slice(0,50);
+        }
+
        
     }
 
@@ -82,8 +95,14 @@ export class Game {
             this.enemies.forEach(enemy => enemy.draw());
         }
 
+       
+
         this.player.draw();
         this.ui.draw();
+
+        if (this.particles) {
+            this.particles.forEach(particle => particle.draw());
+        }
     }
 
     addEnemy() {

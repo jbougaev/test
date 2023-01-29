@@ -7,19 +7,19 @@ export class Player {
         this.ctx = game.ctx;
         this.game = game;
 
-        this.states = [new StandingRight(),
-        new StandingLeft(),
-        new FallingLeft(),
-        new SittingRight(),
+        this.states = [new StandingRight( this.game),
+        new StandingLeft( this.game),
+        new FallingLeft( this.game),
+        new SittingRight( this.game),
 
-        new RunningLeft(),
-        new RunningRight(),
-        new JumpingLeft(),
-        new JumpingRight(),
-        new SittingLeft(),
-        new FallingRight(),
-        new RollingLeft(),
-        new RollingRight()];
+        new RunningLeft( this.game),
+        new RunningRight( this.game),
+        new JumpingLeft( this.game),
+        new JumpingRight( this.game),
+        new SittingLeft( this.game),
+        new FallingRight( this.game),
+        new RollingLeft( this.game),
+        new RollingRight( this.game)];
         this.currentState = this.states[5];
 
         this.image = document.getElementById('dogImg');
@@ -67,7 +67,7 @@ export class Player {
     update(inputHandler) {
         this.checkCollision();
 
-        const stateName = this.currentState.getState(inputHandler, this);
+        const stateName = this.currentState.getState(inputHandler);
         this.setState(stateName !== '' && stateName !== undefined ? stateName : this.currentState.stateName);
 
         this.x += this.speed;
