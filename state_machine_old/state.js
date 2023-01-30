@@ -206,11 +206,10 @@ export class Hit extends State {
     getState(inputHandler) {
 
         let keys = inputHandler.lastKey;;
-        if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround()) {
-
+        if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround() && this.game.player.frameX === 10) {
             return states.RUNNING_RIGHT;
-        } else if (keys.indexOf(Key.KD_ENTER) > -1 && this.game.player.onGround()) {
-            return states.ROLLING_RIGHT;
+        } else if (keys.indexOf(Key.KD_ENTER)  === -1 && !this.game.player.onGround()) {
+            return states.FALLING_RIGHT;
         }
     }
 
