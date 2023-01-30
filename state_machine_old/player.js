@@ -1,4 +1,4 @@
-import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit } from './state.js';
+import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit, State, states } from './state.js';
 
 export class Player {
     constructor(game) {
@@ -92,7 +92,7 @@ export class Player {
     setState(stateName) {
         const state = this.states.find(s => s.stateName === stateName);
         this.currentState = state;
-        this.frameY = this.currentState.frameY;
+        this.frameY = this.currentState.frameY;       
         this.maxFrame = this.currentState.maxOfXFrames;
         this.speed = this.currentState.getXSpeed(this);
         this.game.gameSpeed = this.speed;
@@ -108,11 +108,22 @@ export class Player {
                 enemy.x + enemy.width > this.x &&
                 enemy.y + enemy.height > this.y &&
                 enemy.y < this.y + this.height) {
-                enemy.markedForDeletion = true;
-                this.game.score++;
+                    enemy.markedForDeletion = true;
+                    if(this.currentState.stateName === states.Diving || this.currentState.stateName === states.Rolling){
+                       
+                        this.game.score++;
+                    }else{
+                        this.setState( states.HIT);
+                        this.resetCounter();
+                    }
+           
             }
 
         });
+    }
+
+    resetCounter(){
+        this.index = 0;
     }
 
     decreaseVY(){
