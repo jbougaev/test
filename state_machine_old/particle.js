@@ -10,7 +10,7 @@ export class Particle {
     update() {
         this.x = this.x - this.speedX - this.game.gameSpeed;
         this.y = this.y - this.speedY;
-        this.size = this.size * 0.97;
+        this.size = this.size * 0.97;  //length of a tail
         if (this.size < 0.5) {
             this.markedForDeletion = true;
         }
@@ -42,29 +42,33 @@ export class Dust extends Particle {
 export class Fire extends Particle {
     constructor(game) {
         super(game);
-        this.size = Math.random() * 100 + 50;
-        this.x = this.game.player.x + this.game.player.width * 0.5;
-        this.y = this.game.player.y + this.game.player.height * 0.5;
+        this.size = Math.random() * 100 + 50;   //50 - 150
+        this.x = this.game.player.x + this.game.player.width * 0.5- this.size * 0.5;
+        this.y = this.game.player.y + this.game.player.height * 0.5 - this.size * 0.5;
         this.speedX = 1;
         this.speedY = 1;
         this.image = document.getElementById('fire');
-        this.angle = 0;
-        this.va = Math.random() * 0.2 - 0.1;
+      //  this.angle = 0;
+     //  this.velocityOfAngle = Math.random() * 0.2 - 0.1;
     }
 
     update() {
         super.update();
-        this.angle += this.va;
-        this.x += Math.sin(this.angle * 10);
+      //  this.angle += this.velocityOfAngle;
+      //  this.x += Math.sin(this.angle * 10);
     }
 
 
     draw() {
-        this.ctx.save();
-        this.ctx.translate(this.x, this.y);
-        this.ctx.rotate(this.angle);
-        this.ctx.drawImage(this.image, -this.size * 0.5, -this.size * 0.5, this.size, this.size);
-        this.ctx.restore();
+        // this.ctx.save();
+        // if (this.game.debug) {
+        //     this.ctx.strokeRect(this.x, this.y, this.size, this.size);
+        // }
+        // this.ctx.translate(this.x, this.y);
+        // this.ctx.rotate(this.angle);
+        // this.ctx.drawImage(this.image, 0, 0, this.size, this.size);
+        // this.ctx.restore();
+        this.ctx.drawImage(this.image,this.x, this.y, this.size, this.size);
     }
 }
 
@@ -72,7 +76,7 @@ export class Splash extends Particle {
     constructor(game) {
         super(game);
         this.size = Math.random() * 100 + 100;
-        this.x = this.game.player.x + this.game.player.width * 0.5 - this.size * 0.4;
+        this.x = this.game.player.x + this.game.player.width * 0.5 - this.size * 0.5;
         this.y = this.game.player.y + this.game.player.height - this.size * 0.5;
         this.speedX = Math.random() * 6 - 3;
         this.speedY = Math.random() * 2 + 2;
@@ -84,9 +88,14 @@ export class Splash extends Particle {
         super.update();
         this.gravity += 0.1;
         this.y += this.gravity;
+
+       
     }
 
     draw() {
+        if (this.game.debug) {
+            this.ctx.strokeRect(this.x, this.y, this.size, this.size);
+        }
         this.ctx.drawImage(this.image, this.x, this.y, this.size, this.size);
     }
 }

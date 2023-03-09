@@ -1,5 +1,5 @@
-
-import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit, State, states } from './state.js';
+import { Collision } from './collision.js';
+import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit, states } from './state.js';
 
 export class Player {
     constructor(game) {
@@ -17,7 +17,7 @@ export class Player {
             new Diving(this.game),
             new Hit(this.game),
             new RollingRight(this.game)];
-        this.currentState = this.states[2];
+        this.currentState = this.states[0];
 
         this.image = document.getElementById('dogImg');
 
@@ -54,7 +54,7 @@ export class Player {
 
     updateXFrame() {
         this.frameX = Math.floor(this.index / this.factor) % this.maxFrame;
-        if (this.frameX === this.maxFrame) {
+        if (this.frameX === this.maxFrame - 1) {
 
             this.frameX = 0;
         }
@@ -63,7 +63,7 @@ export class Player {
 
     update(inputHandler) {
         this.checkCollision();
-console.log(inputHandler.lastKey);
+
         const stateName = this.currentState.getState(inputHandler);
         this.setState(stateName !== '' && stateName !== undefined ? stateName : this.currentState.stateName);
 
@@ -110,13 +110,20 @@ console.log(inputHandler.lastKey);
                 enemy.y + enemy.height > this.y &&
                 enemy.y < this.y + this.height) {
                 enemy.markedForDeletion = true;
-                this.game.addCollisionAnimation(enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5);
-                if (this.currentState.stateName === states.DIVING || this.currentState.stateName === states.ROLLING_RIGHT) {
 
+                this.game.collisions.push(new Collision(this.game, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2));
+               
+                if (this.currentState instanceof RollingRight ) {
                     this.game.score++;
-                } else {
+                } else if(this.currentState instanceof Diving){
+                    this.game.score = this.game.score + 10;
+                }               
+                
+                else {
+                    //very important
+                    this.index = 0;  //allows an animation to finish all its frames
+                    this.vy = 1;
                     this.setState(states.HIT);
-                    this.resetCounter();
                 }
 
             }
@@ -124,15 +131,7 @@ console.log(inputHandler.lastKey);
         });
     }
 
-    resetCounter() {
-        this.index = 0;
-    }
-
-    decreaseVY(value) {
-        this.vy -= value;
-    }
-
-    resetVY(){
-        this.vy = 0;
+    decreaseVY() {
+        this.vy -= 30;
     }
 }

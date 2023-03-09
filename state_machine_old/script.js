@@ -31,13 +31,13 @@ function game(canvas, ctx) {
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.update();
+        game.draw();
+        if (!game.gameOver) {
 
-       game.update();
-       game.draw();
-       if(!game.gameOver){
-        window.requestAnimationFrame(animate);
-       }
-       
+            window.requestAnimationFrame(animate);
+        }
+
     }
     animate();
 }

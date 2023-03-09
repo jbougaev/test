@@ -31,10 +31,9 @@ export class StandingRight extends State {
 
     getState(inputHandler) {
         let keys = inputHandler.lastKey;
-        if (keys.indexOf(Key.KD_RIGHT) === -1) {
+        if (keys.indexOf(Key.KD_RIGHT) === -1) { //TODO
             return states.RUNNING_RIGHT;
         }
-
         else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_RIGHT;
         } else if (keys.indexOf(Key.KD_UP) > -1) {
@@ -43,17 +42,16 @@ export class StandingRight extends State {
     }
 }
 
+
+
 export class SittingRight extends State {
     constructor(game) {
         super(5, 5, states.SITTING_RIGHT, game);
-
     }
 
     getState(inputHandler) {
         let keys = inputHandler.lastKey;
-        if (keys.indexOf(Key.KD_LEFT) > -1) {
-            return states.SITTING_LEFT;
-        } else if (keys.indexOf(Key.KD_UP) > -1) {
+        if (keys.indexOf(Key.KD_UP) > -1) {
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_RIGHT) > -1) {
             return states.RUNNING_RIGHT;
@@ -67,6 +65,7 @@ export class RunningRight extends State {
     }
 
     getXSpeed() {
+
         return this.game.player.maxSpeed;
     }
 
@@ -79,13 +78,13 @@ export class RunningRight extends State {
             return states.STANDING_RIGHT;
         } else if (keys.indexOf(Key.KD_DOWN) > -1) {
             return states.SITTING_RIGHT;
-        } else if (keys.indexOf(Key.KD_LEFT) > -1) {
-            return states.RUNNING_LEFT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1) {
             return states.ROLLING_RIGHT;
+
         }
     }
 }
+
 
 export class JumpingRight extends State {
     constructor(game) {
@@ -93,18 +92,18 @@ export class JumpingRight extends State {
     }
 
     getXSpeed() {
+
         if (this.game.player.onGround()) {
-            this.game.player.decreaseVY(30);
+            this.game.player.decreaseVY();
         }
         return this.game.player.maxSpeed;
+
     }
+
 
     getState(inputHandler) {
         let keys = inputHandler.lastKey;
-        if (keys.indexOf(Key.KD_LEFT) > -1) {
-            return states.JUMPING_LEFT;
-
-        } else if (this.game.player.vy > 0) {
+        if (this.game.player.vy > 0) {
             return states.FALLING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1) {
             return states.ROLLING_RIGHT;
@@ -119,11 +118,10 @@ export class FallingRight extends State {
         super(2, 7, states.FALLING_RIGHT, game);
     }
 
+
     getState(inputHandler) {
         let keys = inputHandler.lastKey;
-        if (keys.indexOf(Key.KD_LEFT) > -1) {
-            return states.FALLING_LEFT;
-        } else if (this.game.player.onGround()) {
+        if (this.game.player.onGround()) {
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1) {
             return states.ROLLING_RIGHT;
@@ -142,14 +140,15 @@ export class RollingRight extends State {
         super(6, 7, states.ROLLING_RIGHT, game);
     }
 
+
     getState(inputHandler) {
         this.game.addFireParticle();
-        let keys = inputHandler.lastKey;;
+        let keys = inputHandler.lastKey;
         if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround()) {
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1 && keys.indexOf(Key.KD_UP) > -1) {
             if (this.game.player.onGround()) {
-                this.game.player.decreaseVY(30);
+                this.game.player.decreaseVY();
             }
         }
     }
@@ -162,13 +161,15 @@ export class RollingRight extends State {
 export class Diving extends State {
     constructor(game) {
         super(6, 7, states.DIVING, game);
+
     }
 
     getState(inputHandler) {
+        let keys = inputHandler.lastKey;
+
         this.game.addFireParticle();
-        let keys = inputHandler.lastKey;;
         if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround()) {
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 30; i++) {        // 30 splash particles
                 this.game.addSplashParticle();
             }
             return states.RUNNING_RIGHT;
@@ -176,29 +177,19 @@ export class Diving extends State {
             return states.ROLLING_RIGHT;
         }
     }
-
-    getXSpeed() {
-        return 0;
-    }
 }
 
 export class Hit extends State {
     constructor(game) {
         super(4, 11, states.HIT, game);
-        }
-
-    getState(inputHandler) {
-
-        let keys = inputHandler.lastKey;;
-        if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround() && this.game.player.frameX === 10) {
-            return states.RUNNING_RIGHT;
-        } else if (keys.indexOf(Key.KD_ENTER)  === -1 && !this.game.player.onGround()) {
-            this.game.player.resetVY();
-            return states.FALLING_RIGHT;
-        }
     }
 
-    getXSpeed() {
-        return 0;
+    getState(inputHandler) {
+        if (this.game.player.onGround() && this.game.player.frameX === 9) {
+
+            return states.RUNNING_RIGHT;
+        } else if (!this.game.player.onGround()) {
+            return states.FALLING_RIGHT;
+        }
     }
 }

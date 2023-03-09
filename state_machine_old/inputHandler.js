@@ -50,8 +50,7 @@ export class InputHandler {
             }
         });
 
-        window.addEventListener('keyup', (event) => {
-            console.log(this.lastKey);
+        window.addEventListener('keyup', (event) => {          
             switch (event.key) {
                 case "ArrowLeft":
                     if (this.lastKey.indexOf(Key.KD_LEFT) > -1) {

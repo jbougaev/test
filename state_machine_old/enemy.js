@@ -23,7 +23,7 @@ export class Enemy {
 
     updateXFrame() {
         this.frameX =  Math.floor(this.index / this.factor) % this.numberOfFrames;
-        if (this.frameX === this.numberOfFrames) {
+        if (this.frameX === this.numberOfFrames - 1) {
 
             this.frameX = 0;
         }
