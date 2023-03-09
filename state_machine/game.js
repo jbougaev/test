@@ -16,7 +16,7 @@ export class Game {
         this.climbingEnimies = true;
         this.canvas = canvas;
         this.ctx = ctx;
-        this.bottomMargin = 150;
+        this.bottomMargin = 130;
         this.gameSpeed = 3;
         this.gameWidth = this.canvas.width;
         this.gameHeight = this.canvas.height;

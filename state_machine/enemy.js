@@ -23,7 +23,7 @@ export class Enemy {
 
     updateXFrame() {
         this.frameX =  Math.floor(this.index / this.factor) % this.numberOfFrames;
-        if (this.frameX === this.numberOfFrames - 1) {
+        if (this.frameX === this.numberOfFrames) {
 
             this.frameX = 0;
         }
@@ -72,6 +72,10 @@ export class GroundEnemy extends Enemy {
         this.numberOfFrames = 2;
         this.image = document.getElementById('enemy_plant');
     }
+
+
+
+
 }
 export class ClimbingEnemy extends Enemy {
     constructor(game) {
