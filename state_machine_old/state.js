@@ -94,7 +94,7 @@ export class JumpingRight extends State {
 
     getXSpeed() {
         if (this.game.player.onGround()) {
-            this.game.player.decreaseVY();
+            this.game.player.decreaseVY(30);
         }
         return this.game.player.maxSpeed;
     }
@@ -149,7 +149,7 @@ export class RollingRight extends State {
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1 && keys.indexOf(Key.KD_UP) > -1) {
             if (this.game.player.onGround()) {
-                this.game.player.decreaseVY();
+                this.game.player.decreaseVY(30);
             }
         }
     }
@@ -193,6 +193,7 @@ export class Hit extends State {
         if (keys.indexOf(Key.KD_ENTER) === -1 && this.game.player.onGround() && this.game.player.frameX === 10) {
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER)  === -1 && !this.game.player.onGround()) {
+            this.game.player.resetVY();
             return states.FALLING_RIGHT;
         }
     }

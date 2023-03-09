@@ -18,6 +18,10 @@ export class Game {
         this.gameHeight = this.canvas.height;
         this.score = 0;
 
+        this.time = 0;
+        this.maxTime = 300;
+        this.index = 0;
+this.gameOver = false;
         this.player = new Player(this);
         this.inputHandler = new InputHandler(this);
 
@@ -42,7 +46,11 @@ export class Game {
     }
 
     update() {
-
+        this.index += 1;
+        this.time += this.index % 60 === 1 ? 1 : 0;
+        if(this.time === this.maxTime){
+            this.gameOver = true;
+        }
         this.background1.update();
         this.background2.update();
         this.background3.update();

@@ -55,24 +55,24 @@ export class InputHandler {
             switch (event.key) {
                 case "ArrowLeft":
                     if (this.lastKey.indexOf(Key.KD_LEFT) > -1) {
-                        this.lastKey.splice(this.lastKey.indexOf(Key.KU_LEFT), 1);
+                        this.lastKey.splice(this.lastKey.indexOf(Key.KD_LEFT), 1);
                     }
                     break;
                 case "ArrowRight":
                     if (this.lastKey.indexOf(Key.KD_RIGHT) > -1) {
-                        this.lastKey.splice(this.lastKey.indexOf(Key.KU_RIGHT), 1);
+                        this.lastKey.splice(this.lastKey.indexOf(Key.KD_RIGHT), 1);
                     }
                   
                     break;
                 case "ArrowDown":
                     if (this.lastKey.indexOf(Key.KD_DOWN) > -1) {
-                        this.lastKey.splice(this.lastKey.indexOf(Key.KU_DOWN), 1);
+                        this.lastKey.splice(this.lastKey.indexOf(Key.KD_DOWN), 1);
                     }
                   
                     break;
                 case "ArrowUp":
                     if (this.lastKey.indexOf(Key.KD_UP) > -1) {
-                        this.lastKey.splice(this.lastKey.indexOf(Key.KU_UP), 1);
+                        this.lastKey.splice(this.lastKey.indexOf(Key.KD_UP), 1);
                     }
                   
                     break;

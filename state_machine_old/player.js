@@ -17,7 +17,7 @@ export class Player {
             new Diving(this.game),
             new Hit(this.game),
             new RollingRight(this.game)];
-        this.currentState = this.states[5];
+        this.currentState = this.states[2];
 
         this.image = document.getElementById('dogImg');
 
@@ -63,7 +63,7 @@ export class Player {
 
     update(inputHandler) {
         this.checkCollision();
-
+console.log(inputHandler.lastKey);
         const stateName = this.currentState.getState(inputHandler);
         this.setState(stateName !== '' && stateName !== undefined ? stateName : this.currentState.stateName);
 
@@ -111,7 +111,7 @@ export class Player {
                 enemy.y < this.y + this.height) {
                 enemy.markedForDeletion = true;
                 this.game.addCollisionAnimation(enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5);
-                if (this.currentState.stateName === states.Diving || this.currentState.stateName === states.Rolling) {
+                if (this.currentState.stateName === states.DIVING || this.currentState.stateName === states.ROLLING_RIGHT) {
 
                     this.game.score++;
                 } else {
@@ -128,7 +128,11 @@ export class Player {
         this.index = 0;
     }
 
-    decreaseVY() {
-        this.vy -= 30;
+    decreaseVY(value) {
+        this.vy -= value;
+    }
+
+    resetVY(){
+        this.vy = 0;
     }
 }

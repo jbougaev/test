@@ -34,7 +34,10 @@ function game(canvas, ctx) {
 
        game.update();
        game.draw();
+       if(!game.gameOver){
         window.requestAnimationFrame(animate);
+       }
+       
     }
     animate();
 }
