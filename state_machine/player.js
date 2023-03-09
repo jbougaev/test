@@ -1,110 +1,137 @@
-import { StandingLeft, StandingRight, SittingLeft, SittingRight, RunningLeft, RunningRight, JumpingLeft, JumpingRight, FallingLeft, FallingRight } from "./state.js";
-
+import { Collision } from './collision.js';
+import { StandingRight, SittingRight, RunningRight, JumpingRight, FallingRight, RollingRight, Diving, Hit, states } from './state.js';
 
 export class Player {
-
     constructor(game) {
-        this.gameWidth = game.canvas.width;
-        this.gameHeight = game.canvas.height;
+        this.gameHeight = game.gameHeight;
+        this.gameWidth = game.gameWidth;
+        this.ctx = game.ctx;
         this.game = game;
-        this.ctx = this.game.ctx;
-        this.width = 200;
-        this.height = 181.83;
 
-        this.x0 = 0;
-        this.y0 = this.gameHeight - this.height;
+        this.states = [
+            new StandingRight(this.game),
+            new SittingRight(this.game),
+            new RunningRight(this.game),
+            new JumpingRight(this.game),
+            new FallingRight(this.game),
+            new Diving(this.game),
+            new Hit(this.game),
+            new RollingRight(this.game)];
+        this.currentState = this.states[0];
+
+        this.image = document.getElementById('dogImg');
+
+        this.width = 100;
+        this.height = 91.3;
+
+        this.x0 = this.gameWidth / 2 - this.width / 2;
+        this.y0 = this.gameHeight - this.height - game.bottomMargin;
 
         this.x = this.x0;
         this.y = this.y0;
 
-        this.image = document.getElementById('dogImg');
-
         this.frameX = 0;
         this.frameY = 0;
-
-        this.states = [new StandingLeft(), new StandingRight(), new SittingLeft(), new SittingRight(), new RunningLeft(), new RunningRight(), new JumpingLeft(), new JumpingRight(), new FallingLeft(), new FallingRight()];
-        this.currentState = this.states[1];
 
         this.speed = 0;
         this.maxSpeed = this.game.gameSpeed;
 
-        this.index = 0
-        this.numberOfFrames = 0;
-        this.animationSpeedModifier = 5;
-
-        this.speedY = 0;
+        this.maxFrame = this.currentState.maxOfXFrames;
+        this.vy = 0;
         this.weight = 1;
+        this.factor = 5;
+        this.index = 0;
+    }
+
+    draw() {
+
+        if (this.game.debug) {
+            this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+        }
+        this.ctx.drawImage(this.image, this.width * this.frameX, this.height * this.frameY, this.width, this.height, this.x, this.y, this.width, this.height);
 
     }
 
-    update(lastKey) {
-        //get the next state name based on the last key pressed
-        let stateName = this.currentState.getState(lastKey, this);
+    updateXFrame() {
+        this.frameX = Math.floor(this.index / this.factor) % this.maxFrame;
+        if (this.frameX === this.maxFrame - 1) {
 
-        // check if state Name is defined
-        stateName = stateName === '' || stateName === undefined ? this.currentState.stateName : stateName;
+            this.frameX = 0;
+        }
+        this.index += 1;
+    }
 
-        //find a state object based on the next state name
-        const state = this.states.find((state) => {
-            return state.stateName === stateName;
-        });
+    update(inputHandler) {
+        this.checkCollision();
 
-        //set the currnet frames row
-        this.frameY = state.frameY;
+        const stateName = this.currentState.getState(inputHandler);
+        this.setState(stateName !== '' && stateName !== undefined ? stateName : this.currentState.stateName);
 
-        this.currentState = state;
+        this.x += this.speed;
+        this.y += this.vy;
 
-        //get a speed of the current state
-        this.speed = this.currentState.getSpeed(this);
-
-        //moving
-        this.x = this.x + this.speed;
-        this.y = this.y + this.speedY;
-
-        //limitation
-        if (this.x > this.gameWidth/2 - this.width) {
-            this.x = this.gameWidth/2 - this.width;
-        } else if (this.x < 0) {
+        if (this.x < 0) {
             this.x = 0;
+        } else if (this.x > this.x0) {
+            this.x = this.x0;
         }
 
         if (this.y > this.y0) {
             this.y = this.y0;
         }
 
-        //update x frames
-        this.numberOfFrames = this.currentState.numberOfFrames;
-        this.frameX = Math.floor(this.index / this.animationSpeedModifier) % this.numberOfFrames;
-        if (this.frameX === this.numberOfFrames) {
-
-            this.frameX = 0;
-        }
-        this.index = this.index + 1;
-
-        if (!this.isOnGround()) {
-            this.speedY = this.speedY + 1;
+        // jumping
+        if (!this.onGround()) {
+            this.vy += this.weight;
         } else {
-            this.speedY = 0;
+            this.vy = 0;
         }
+
+        this.updateXFrame();
     }
 
-
-    draw() {
-
-        this.ctx.drawImage(this.image,
-            this.width * this.frameX, this.height * this.frameY, this.width, this.height,
-            this.x, this.y, this.width, this.height);
+    setState(stateName) {
+        const state = this.states.find(s => s.stateName === stateName);
+        this.currentState = state;
+        this.frameY = this.currentState.frameY;
+        this.maxFrame = this.currentState.maxOfXFrames;
+        this.speed = this.currentState.getXSpeed(this);
+        this.game.gameSpeed = this.speed;
     }
 
-    isOnGround() {
-        return this.y === this.y0;
+    onGround() {
+        return this.y >= this.gameHeight - this.height - this.game.bottomMargin;
+    }
+
+    checkCollision() {
+        this.game.enemies.forEach(enemy => {
+            if (enemy.x < this.x + this.width &&
+                enemy.x + enemy.width > this.x &&
+                enemy.y + enemy.height > this.y &&
+                enemy.y < this.y + this.height) {
+                enemy.markedForDeletion = true;
+
+                this.game.collisions.push(new Collision(this.game, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2));
+               
+                if (this.currentState instanceof RollingRight ) {
+                    this.game.score++;
+                } else if(this.currentState instanceof Diving){
+                    this.game.score = this.game.score + 10;
+                }               
+                
+                else {
+                    //very important
+                    this.index = 0;  //allows an animation to finish all its frames
+                    this.vy = 1;
+                    this.setState(states.HIT);
+                }
+
+            }
+
+        });
+    }
+
+    decreaseVY() {
+        this.vy -= 30;
     }
 }
-
-
-
-
-
-
-
-
