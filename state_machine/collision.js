@@ -16,6 +16,8 @@ export class Collision{
 
         this.factor = 5;
         this.index = 0;
+        this.sound = new Audio();
+        this.sound.src = "./sound/crash.wav";
     }
 
     draw() {
@@ -26,7 +28,7 @@ export class Collision{
     update() {
         this.x = this.x - this.game.gameSpeed;
         this.updateXFrame();
-               
+        this.sound.play();
     }
 
     updateXFrame() {

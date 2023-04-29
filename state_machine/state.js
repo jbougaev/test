@@ -161,6 +161,8 @@ export class RollingRight extends State {
 export class Diving extends State {
     constructor(game) {
         super(6, 7, states.DIVING, game);
+        this.sound = new Audio();
+        this.sound.src = "./sound/wow.wav";
 
     }
 
@@ -172,6 +174,7 @@ export class Diving extends State {
             for (let i = 0; i < 30; i++) {        // 30 splash particles
                 this.game.addSplashParticle();
             }
+            this.sound.play();
             return states.RUNNING_RIGHT;
         } else if (keys.indexOf(Key.KD_ENTER) > -1 && this.game.player.onGround()) {
             return states.ROLLING_RIGHT;
@@ -182,6 +185,7 @@ export class Diving extends State {
 export class Hit extends State {
     constructor(game) {
         super(4, 11, states.HIT, game);
+        
     }
 
     getState(inputHandler) {

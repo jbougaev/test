@@ -4,6 +4,8 @@ export class UI {
         this.ctx = this.game.ctx;
         this.fontSize = 30;
         this.fontFamily = 'Helvetica';
+        this.sound = new Audio();
+        this.sound.src = "./sound/success-fanfare-trumpets-6185.mp3";
     }
 
     draw() {
@@ -23,6 +25,7 @@ export class UI {
             this.ctx.textAlign = 'center';
             this.ctx.fillStyle = 'black';
             this.ctx.fillText('Game is over!', this.game.gameWidth / 2, this.game.gameHeight / 2);
+            this.sound.play();
         }
         
     }

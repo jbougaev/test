@@ -82,13 +82,14 @@ export class Splash extends Particle {
         this.speedY = Math.random() * 2 + 2;
         this.gravity = 0;
         this.image = document.getElementById('fire');
+        
     }
 
     update() {
         super.update();
         this.gravity += 0.1;
         this.y += this.gravity;
-
+       
        
     }
 
