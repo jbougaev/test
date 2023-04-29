@@ -15,11 +15,14 @@ export class CollisionAnimation {
         this.maxFrame = 4;
         this.factor = 5;
         this.index = 0;
+        this.sound = new Audio();
+        this.sound.src = "./sound/crash.wav";
     }
 
     update() {
         this.x -= this.game.gameSpeed;
         this.updateXFrame();
+        this.sound.play();
     }
 
     updateXFrame() {

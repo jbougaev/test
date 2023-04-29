@@ -41,6 +41,8 @@ export class Player {
         this.weight = 1;
         this.factor = 5;
         this.index = 0;
+
+        
     }
 
     draw() {
@@ -109,6 +111,7 @@ export class Player {
                 enemy.x + enemy.width > this.x &&
                 enemy.y + enemy.height > this.y &&
                 enemy.y < this.y + this.height) {
+
                 enemy.markedForDeletion = true;
 
                 this.game.collisions.push(new Collision(this.game, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2));
@@ -124,6 +127,7 @@ export class Player {
                     this.index = 0;  //allows an animation to finish all its frames
                     this.vy = 1;
                     this.setState(states.HIT);
+                    
                 }
 
             }
